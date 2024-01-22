@@ -1,0 +1,95 @@
+.form-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-controls label {
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.form-controls input {
+  outline: none;
+  border-radius: 0.35rem;
+  border: 1.5px solid #ccc;
+  padding: 0.8rem 1rem;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+}
+
+.form-controls input::placeholder {
+  font-size: 1.3rem;
+}
+
+.form-controls input:focus {
+  border: 1.5px solid #228be6;
+}
+
+/* SELECT INPUT */
+
+.select-form-controls {
+  position: relative;
+}
+
+.select-form-controls input {
+  cursor: pointer;
+}
+
+.select-dropdown-icon {
+  position: absolute;
+  right: 1.25rem;
+  top: 65%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.select-dropdown-icon-rotated {
+  position: absolute;
+  right: 1.1rem;
+  top: 65%;
+  transform: translateY(-50%) rotate(180deg);
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.options-container {
+  position: absolute;
+  top: 6rem;
+  width: 100%;
+  border-radius: 0.7rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  padding: 1rem 0;
+  z-index: 2;
+  background-color: #fff;
+}
+
+.options-lists {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  max-height: 20rem;
+  overflow-y: scroll;
+  background-color: #fff;
+}
+
+.options-lists .list-items {
+  padding: 0.5rem 1rem;
+}
+
+.options-lists .list-items:hover {
+  background-color: #e7f5ff;
+  cursor: pointer;
+}
+
+.options-lists .list-items p {
+  font-weight: 400;
+  font-size: 1.3rem;
+  letter-spacing: 0.75px;
+}
+
+.asterisk {
+  color: red;
+}

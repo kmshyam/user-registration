@@ -1,0 +1,174 @@
+.sidenav-container {
+  display: grid;
+  grid-area: nav;
+  background-color: #ffffff;
+  color: #495057;
+  height: 100vh;
+  width: 25rem;
+  z-index: 2000;
+  position: sticky;
+  top: 0;
+  transition: width 0.3s cubic-bezier(0.4, 0, 1, 1);
+  overflow: hidden;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+  background-color: #ffffff;
+  color: #ffffff;
+  width: 25rem;
+  height: 100vh;
+  position: absolute;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s cubic-bezier(0.4, 0, 1, 1);
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  padding: 0 0 2rem 0;
+}
+
+.main-logo-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.main-logo-container {
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-left: -0.5rem;
+}
+
+.main-logo-container img {
+  width: 100%;
+  height: 100%;
+}
+
+.compact {
+  width: 7rem;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  min-height: 6rem;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem 0 2.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  color: #272e48;
+}
+
+.compact-logo {
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.normal-logo {
+  margin-top: 0.25rem;
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  width: 100vw;
+  opacity: 0;
+  pointer-events: all;
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 1, 1);
+  z-index: 500;
+}
+
+.logout-btn {
+  background: transparent;
+  padding: 0 2.55rem;
+  width: 100%;
+  min-height: 5.6rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #495057;
+  border: none;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  letter-spacing: 0.25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 -1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+.menu-item p {
+  font-size: 1.4rem;
+  white-space: nowrap;
+}
+
+.menu-icons {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.icon {
+  height: 1.8rem;
+  width: 1.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.compact-menu-items {
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.logout-btn:hover {
+  background: #e3edfa;
+  border-radius: 0.5rem;
+}
+
+@media (max-width: 92rem) {
+  .sidenav-container {
+    position: fixed;
+    width: 25rem;
+    transform: translate3d(-25rem, 0, 0);
+  }
+
+  .navbar {
+    position: fixed;
+    width: 25rem;
+  }
+
+  .transition-show {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 1, 1);
+  }
+
+  .transition-hide {
+    transition: transform 0.3s cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .compact-logo {
+    opacity: 1;
+  }
+
+  .compact-menu-items {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 92rem) {
+  .backdrop {
+    opacity: 0;
+    pointer-events: none;
+  }
+}

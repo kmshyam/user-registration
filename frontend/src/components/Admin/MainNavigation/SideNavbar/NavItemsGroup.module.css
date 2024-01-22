@@ -1,0 +1,26 @@
+.navlink-group {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 0.5rem;
+  overflow: hidden;
+  overflow-y: auto;
+  transition: flex-grow 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.compact-navlink-group {
+  flex-grow: 0;
+  transition: flex-grow 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.navlink-group a {
+  box-shadow: none;
+  min-height: 5rem;
+  border-bottom: none;
+}
+
+@media (max-width: 92rem) {
+  .navlink-group {
+    flex-grow: 1;
+  }
+}

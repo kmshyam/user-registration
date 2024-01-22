@@ -1,0 +1,159 @@
+.form {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 2.5rem;
+}
+
+.profile-box,
+.personal-info-box {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  margin-top: 0.5rem;
+  padding: 2rem;
+}
+
+.personal-info-box {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 1.7rem;
+  column-gap: 2rem;
+}
+
+.profile-box {
+  position: relative;
+}
+
+.profile-heading {
+  text-align: center;
+  font-size: 1.7rem;
+  font-weight: 500;
+  letter-spacing: 0.75px;
+}
+
+/* Image Preview Section */
+
+.image-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.image-container {
+  max-width: 40rem;
+  width: 18rem;
+  height: 18rem;
+  background: #fff;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin: 0 auto;
+}
+
+.img-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #f2f2f2;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.img-area .icon {
+  font-size: 3rem;
+  color: #bbb;
+}
+
+.img-area h3 {
+  font-size: 1.4rem;
+  letter-spacing: 0.25px;
+  font-weight: 500;
+  color: #aaa;
+}
+
+.img-area img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 100;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.custom-input {
+  position: relative;
+  font-size: 1.3rem;
+  border: none;
+  outline: none;
+  border-radius: 0.35rem;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #855edd 0%, #63afd3 100%);
+  color: #ffff;
+  font-weight: 500;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.custom-input:hover {
+  background: linear-gradient(135deg, #7855c7 0%, #599ebe 100%);
+}
+
+.custom-input:focus {
+  outline: none;
+}
+
+/* file-name */
+
+.file-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #7855c7 0%, #599ebe 100%);
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.25px;
+  overflow: hidden;
+  transition: all 0.5s;
+}
+
+.file-name.active {
+  animation: nameAnimate 0.3s linear;
+}
+
+.real-input {
+  display: none;
+}
+
+.form-actions {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 9.5rem;
+  width: 14rem;
+}
+
+.btn {
+  width: 100%;
+  background: linear-gradient(to bottom right, #027535, #41ff57);
+  color: #ebfbee;
+  font-weight: 600;
+  border-radius: 0.4rem;
+  letter-spacing: 0.75px;
+  font-size: 1.3rem;
+  padding: 0.8rem 1.8rem;
+}

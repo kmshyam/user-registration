@@ -1,0 +1,100 @@
+.form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 2.5rem;
+}
+
+.permanent-address-box,
+.current-address-box {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  margin-top: 0.5rem;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 2rem;
+}
+
+.permanent-address-box h2,
+.current-address-box h2 {
+  text-align: center;
+  font-size: 1.7rem;
+  font-weight: 500;
+  letter-spacing: 0.75px;
+}
+
+.permanent-address-input-box,
+.current-address-input-box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 2rem;
+  row-gap: 1.25rem;
+}
+
+.current-address-box {
+  position: relative;
+}
+
+.address-checkbox {
+  position: absolute;
+  right: 2rem;
+  top: 2.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.address-checkbox input {
+  width: 1.6rem;
+  height: 1.6rem;
+  cursor: pointer;
+}
+
+.address-checkbox p {
+  font-size: 1.2rem;
+  letter-spacing: 0.75px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  grid-column: 1/-1;
+}
+
+.btn {
+  border-radius: 0.4rem;
+  letter-spacing: 0.75px;
+  font-weight: 600;
+  font-size: 1.3rem;
+  padding: 0.8rem 1.8rem;
+}
+
+.previous-next-btns {
+  margin-top: 2rem;
+  position: relative;
+}
+
+.previous-btn,
+.next-btn {
+  width: 12rem;
+}
+
+.previous-btn {
+  background: linear-gradient(to bottom right, #e46b69, #ff3636);
+  color: #fff5f5;
+}
+
+.next-btn {
+  background: linear-gradient(to bottom right, #027535, #41ff57);
+  color: #ebfbee;
+}
+
+.previous-btn:hover {
+  background: linear-gradient(to bottom right, #ff7471, #e63131);
+}
+
+.next-btn:hover {
+  background: linear-gradient(to bottom right, #026931, #35ff4d);
+}

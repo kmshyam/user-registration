@@ -1,0 +1,9 @@
+.header {
+  margin-bottom: 1.1rem;
+}
+
+.add-user-section {
+  margin-top: 1rem;
+  max-height: calc(100vh - 22rem);
+  overflow-y: scroll;
+}

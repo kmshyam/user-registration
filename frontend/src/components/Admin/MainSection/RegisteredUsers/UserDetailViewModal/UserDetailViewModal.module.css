@@ -1,0 +1,246 @@
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  max-height: calc(100vh - 5rem);
+  min-height: calc(100vh - 5rem);
+  overflow-y: scroll;
+  z-index: 2600;
+  border-radius: 0.4rem;
+  background-color: #fcfcfc;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem 2.5rem;
+  animation: fadeIn 1s ease;
+}
+
+.header {
+  padding: 0 1.5rem;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  color: #495057;
+  text-align: center;
+  font-weight: 600;
+}
+
+.close-icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.content {
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 5rem;
+}
+
+.personal-info-section,
+.boarding-info-section,
+.location-info-section,
+.education-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.personal-info-section h2,
+.boarding-info-section h2,
+.location-info-section h2,
+.education-info-section h2 {
+  font-size: 1.6rem;
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.75px;
+}
+
+.personal-info-box,
+.boarding-info-box {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 3rem;
+  row-gap: 3rem;
+}
+
+.two-col-section {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr;
+  grid-template-rows: min-content min-content min-content;
+  gap: 3rem;
+}
+
+.profile-image-box {
+  grid-column: -1/-2;
+  grid-row: 1/3;
+  position: relative;
+}
+
+.profile-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 17rem;
+  height: 17rem;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-img img {
+  width: 100%;
+  height: 100%;
+}
+
+.preview-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 17rem;
+  height: 17rem;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa;
+}
+
+.icon {
+  font-size: 2rem;
+  color: #adb5bd;
+}
+
+.preview-box h3 {
+  color: #adb5bd;
+  font-weight: 500;
+  font-size: 1.3rem;
+  letter-spacing: 0.75px;
+}
+
+.permanent-address-box h3,
+.current-address-box h3 {
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.75px;
+}
+
+.location-info-box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 3rem;
+}
+
+.permanent-address-box,
+.current-address-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.permanent-address-details,
+.current-address-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.detail {
+  box-shadow: inset 0.2rem 0.5rem 1rem rgba(0, 0, 0, 0.1),
+    inset -0.2rem -0.5rem 1rem rgba(255, 255, 255, 1),
+    1.5rem 1.5rem 1rem rgba(0, 0, 0, 0.05),
+    1.5rem 1rem 1.5rem rgba(0, 0, 0, 0.025);
+  padding: 1rem 1.5rem;
+  border-radius: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: 0.3s;
+}
+
+.detail:hover {
+  transform: scale(1.03);
+}
+
+.detail p {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.75px;
+  margin-bottom: 0.25rem;
+}
+
+.detail h3 {
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-align: left;
+}
+
+.education-details-container {
+  min-height: 14rem;
+}
+
+.education-details-list-headings,
+.education-details-lists {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: 0.55fr 1.5fr 3fr 1.25fr 1.25fr;
+}
+
+.education-details-lists {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.education-details-lists:hover {
+  background: #f8f9ff;
+}
+
+.education-details-list-headings li,
+.education-details-lists li {
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+}
+
+.education-details-list-headings li {
+  font-weight: 600;
+  background: #d5d6f4;
+  color: #343a40;
+  border-right: 2px solid #ececec;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  75% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
