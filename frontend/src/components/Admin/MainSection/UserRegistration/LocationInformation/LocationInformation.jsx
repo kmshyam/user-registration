@@ -256,7 +256,8 @@ const LocationInformation = () => {
     });
   };
 
-  const previousNavigateHandler = () => {
+  const previousNavigateHandler = (e) => {
+    e.preventDefault();
     sessionStorage.removeItem("userLocationData");
     const userBoardingData = JSON.parse(
       sessionStorage.getItem("userBoardingData")

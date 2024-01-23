@@ -30,3 +30,10 @@ exports.rndmFiveDigNum = () => {
   }
   return fiveDigRndm;
 };
+
+exports.getUnixTime = () => {
+  const currentDate = new Date();
+  const unixTimestamp = currentDate.getTime();
+  const unixTimestampInSeconds = Math.floor(unixTimestamp / 1000);
+  return unixTimestampInSeconds;
+};

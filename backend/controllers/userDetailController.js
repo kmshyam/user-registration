@@ -1,4 +1,6 @@
 const bcrypt = require("bcrypt");
+const path = require("path");
+const fs = require("fs");
 const UserDetail = require("../models/userDetailSchema");
 const saltRounds = 10;
 
@@ -155,5 +157,88 @@ exports.deleteUserData = async (req, res) => {
       status: "Failed",
       message: error.message,
     });
+  }
+};
+
+exports.uploadUserFiles = (req, res) => {
+  try {
+    const { originalname, filename, size, mimetype } = req.file;
+    const fileDetail = {
+      originalFileName: originalname,
+      storedFileName: filename,
+      fileSize: size,
+      fileType: mimetype,
+      timestamp: new Date(),
+      userID: req.params.userID,
+    };
+    res.status(200).json({
+      status: "Success",
+      message: "User files uploaded successfully",
+      fileDetail,
+    });
+  } catch (err) {
+    res.status(500).json({ status: "Failed", message: err.message });
+  }
+};
+
+exports.downloadUserDocument = (req, res) => {
+  const { userID, file } = req.query;
+  const filePath = path.join("public", "users", userID, "documents", file);
+  try {
+    if (fs.existsSync(filePath)) {
+      const fileStream = fs.createReadStream(filePath);
+      res.setHeader("Content-disposition", `attachment; filename=${file}`);
+      res.setHeader("Content-type", "application/pdf");
+      fileStream.pipe(res);
+    } else {
+      res.status(404).json({ error: "File not found" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+exports.deleteUserDocument = (req, res) => {
+  try {
+    const fileToDelete = req.query.file;
+    const userID = req.query.userID;
+    const documentPath = path.join("public", "users", userID, "documents");
+    const filePath = path.join(documentPath, fileToDelete);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      res.status(200).send({
+        status: "Success",
+        message: "Document deleted successfully",
+      });
+    } else {
+      res.status(404).send({
+        status: "Failed",
+        message: "File not found",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ status: "Failed", message: err.message });
+  }
+};
+
+exports.deleteAllUserDocuments = (req, res) => {
+  try {
+    const userID = req.query.userID;
+    const documentPath = path.join("public", "users", userID, "documents");
+    if (fs.existsSync(documentPath)) {
+      fs.rmdirSync(documentPath, { recursive: true });
+      res.status(200).json({
+        status: "Success",
+        message: "Documents deleted successfully.",
+      });
+    } else {
+      res.status(404).json({
+        status: "Not Found",
+        message: "Documents folder not found for the specified user.",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ status: "Failed", message: err.message });
   }
 };

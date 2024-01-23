@@ -1,11 +1,19 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import classes from "./Documents.module.css";
 import { Input, SelectInput } from "../../../../UI/Input/InputItem";
 import Button from "../../../../UI/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCloudUpload,
+  faDownload,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { useUsers } from "../../../../../store/UsersContext/UserContextProvider";
+import { getAuthToken } from "../../../../Utils/auth";
+
+const url = import.meta.env.VITE_REACT_APP_URL;
+const port = import.meta.env.VITE_REACT_APP_PORT;
 
 const initialState = {
   education_details: [],
@@ -57,8 +65,137 @@ const Documents = () => {
     documentsReducer,
     initialState
   );
+  const [personalInfo, setPersonalInfo] = useState({});
   const { addUserRegistrationDetailsHandler } = useUsers();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const { personalInfoState } = JSON.parse(
+      sessionStorage.getItem("userPersonalData")
+    );
+    if (sessionStorage.getItem("userDocuments")) {
+      const userData = JSON.parse(sessionStorage.getItem("userDocuments"));
+      dispatchFn({
+        type: "UPDATE_FIELD",
+        payload: { value: userData, name: "documents" },
+      });
+    }
+    setPersonalInfo(personalInfoState);
+  }, []);
+
+  const uploadFile = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const response = await fetch(
+        `${url}:${port}/user/detail/upload/files/${personalInfo.user_id}`,
+        {
+          method: "POST",
+          headers: {
+            enctype: "multipart/form-data",
+            Authorization: getAuthToken(),
+          },
+          body: formData,
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const userDocuments = sessionStorage.getItem("userDocuments");
+        if (!userDocuments) {
+          sessionStorage.setItem(
+            "userDocuments",
+            JSON.stringify([data.fileDetail])
+          );
+          dispatchFn({
+            type: "UPDATE_FIELD",
+            payload: {
+              value: [...documentsState.documents, data.fileDetail],
+              name: "documents",
+            },
+          });
+        } else {
+          const userDocumentsArr = JSON.parse(userDocuments);
+          const updatedDocumentsArr = [...userDocumentsArr, data.fileDetail];
+          sessionStorage.removeItem("userDocuments");
+          sessionStorage.setItem(
+            "userDocuments",
+            JSON.stringify(updatedDocumentsArr)
+          );
+          dispatchFn({
+            type: "UPDATE_FIELD",
+            payload: { value: updatedDocumentsArr, name: "documents" },
+          });
+        }
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const documentFileChangeHandler = async (e) => {
+    const documentFile = e.target.files[0];
+    await uploadFile(documentFile);
+  };
+
+  const uploadDocumentButtonClickHandler = (e) => {
+    e.preventDefault();
+    document.querySelector(`#document_file`).click();
+  };
+
+  const downloadDocumentHandler = async (file) => {
+    try {
+      const response = await fetch(
+        `${url}:${port}/user/detail/document/download?userID=${personalInfo.user_id}&file=${file.storedFileName}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: getAuthToken(),
+          },
+        }
+      );
+      if (response.ok) {
+        const blob = await response.blob();
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = file.originalFileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        console.log("Failed to download document.");
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const deleteDocumentHandler = async (file) => {
+    try {
+      const response = await fetch(
+        `${url}:${port}/user/detail/document/delete?userID=${personalInfo.user_id}&file=${file.storedFileName}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: getAuthToken(),
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (err) {
+      console.log(err.message);
+    }
+    const userDocuments = JSON.parse(sessionStorage.getItem("userDocuments"));
+    const filteredDocuments = userDocuments.filter(
+      (document) => document.storedFileName !== file.storedFileName
+    );
+    sessionStorage.removeItem("userDocuments");
+    sessionStorage.setItem("userDocuments", JSON.stringify(filteredDocuments));
+    dispatchFn({
+      type: "UPDATE_FIELD",
+      payload: { value: filteredDocuments, name: "documents" },
+    });
+  };
 
   const qualificationChangeHandler = (qualification) => {
     dispatchFn({
@@ -101,11 +238,27 @@ const Documents = () => {
     });
   };
 
-  const previousNavigateHandler = () => {
-    sessionStorage.removeItem("userDocumentsData");
+  const previousNavigateHandler = async (e) => {
+    e.preventDefault();
+    sessionStorage.removeItem("userDocuments");
     const userLocationData = JSON.parse(
       sessionStorage.getItem("userLocationData")
     );
+    try {
+      const response = await fetch(
+        `${url}:${port}/user/detail/documents/delete/all?userID=${personalInfo.user_id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: getAuthToken(),
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (err) {
+      console.log(err.message);
+    }
     navigate("/user/registration/location_info", {
       state: userLocationData,
     });
@@ -133,13 +286,71 @@ const Documents = () => {
     sessionStorage.removeItem("userPersonalData");
     sessionStorage.removeItem("userBoardingData");
     sessionStorage.removeItem("userLocationData");
+    sessionStorage.removeItem("userDocuments");
     navigate("/user/registration/personal_info");
   };
 
   return (
     <form className={classes.form} onSubmit={submitHandler}>
       <div className={classes["documents-box"]}>
-        <h2>Documents</h2>
+        <div className={classes["document-header-box"]}>
+          <h2>Documents</h2>
+          <div className={classes["file-form-controls"]}>
+            <div>
+              <input
+                id={`document_file`}
+                type="file"
+                name={`document_file`}
+                accept=".docx, .pdf"
+                onChange={(e) => documentFileChangeHandler(e)}
+                className={classes["real-input"]}
+              />
+              <div className={classes.wrapper}>
+                <button
+                  type="button"
+                  className={classes["custom-input"]}
+                  onClick={(e) => uploadDocumentButtonClickHandler(e)}
+                >
+                  <FontAwesomeIcon
+                    icon={faCloudUpload}
+                    className={classes["cloud-icon"]}
+                  />
+                  <p>Upload document</p>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={classes["document-details-container"]}>
+          <ul className={classes["document-details-list-headings"]}>
+            <li>S No</li>
+            <li>Document</li>
+            <li>Remarks</li>
+            <li>View</li>
+            <li>Action</li>
+          </ul>
+          {documentsState.documents.map((item, index) => (
+            <ul className={classes["document-details-lists"]} key={index}>
+              <li>{index + 1}</li>
+              <li>{item.originalFileName}</li>
+              <li>Approved</li>
+              <li>
+                <FontAwesomeIcon
+                  icon={faDownload}
+                  className={classes["download-icon"]}
+                  onClick={() => downloadDocumentHandler(item)}
+                />
+              </li>
+              <li>
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  className={classes["delete-icon"]}
+                  onClick={() => deleteDocumentHandler(item)}
+                />
+              </li>
+            </ul>
+          ))}
+        </div>
       </div>
       <div className={classes["education-details-box"]}>
         <h2>Education Qualification</h2>

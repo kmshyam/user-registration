@@ -1,6 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const { getUnixTime } = require("./unique");
 
 const userProfileImageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -44,6 +45,29 @@ const userProfileImageStorage = multer.diskStorage({
 
 const uploadUserProfileImage = multer({ storage: userProfileImageStorage });
 
+const userDocumentsStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const { userID } = req.params;
+    const documentPath = path.join("public", "users", userID, "documents");
+
+    if (!fs.existsSync(documentPath)) {
+      fs.mkdirSync(documentPath, { recursive: true });
+    }
+    cb(null, documentPath);
+  },
+  filename: (req, file, cb) => {
+    const originalFilename = file.originalname;
+    const fieldName = file.fieldname;
+    const filename = `${fieldName}_document_${getUnixTime()}_${originalFilename
+      .split(" ")
+      .join("_")}`;
+    cb(null, filename);
+  },
+});
+
+const uploadUserDocuments = multer({ storage: userDocumentsStorage });
+
 module.exports = {
   uploadUserProfileImage,
+  uploadUserDocuments,
 };

@@ -24,8 +24,6 @@ const RegisteredUsers = () => {
   const [selectedUserData, setSelectedUserData] = useState({});
   const [showUserDetailModal, setShowUserDetailModal] = useState(false);
 
-  console.log(registeredUsers);
-
   const indexOfLastEntry = currentPage * entriesPerPage;
   const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
 
@@ -125,7 +123,7 @@ const RegisteredUsers = () => {
             <li>Status</li>
             <li>Action</li>
           </ul>
-          {registeredUsers.length > 1 ? (
+          {registeredUsers.length > 0 ? (
             currentEntries.map((item, index) => (
               <ul className={classes["user-details-lists"]} key={index}>
                 <li>{indexOfFirstEntry + index + 1}</li>
@@ -159,7 +157,7 @@ const RegisteredUsers = () => {
             <p className={classes["no-data"]}>No rows</p>
           )}
         </div>
-        {registeredUsers.length > 1 && (
+        {registeredUsers.length > 0 && (
           <div className={classes["pagination-container"]}>
             <div className={classes["entries-count-box"]}>
               <p>

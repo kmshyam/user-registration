@@ -12,7 +12,12 @@
   padding: 2rem;
   display: grid;
   grid-template-columns: 1fr;
+  grid-template-rows: min-content;
   row-gap: 1rem;
+}
+
+.document-header-box {
+  position: relative;
 }
 
 .documents-box h2,
@@ -21,6 +26,59 @@
   font-size: 1.7rem;
   font-weight: 500;
   letter-spacing: 0.75px;
+}
+
+.file-form-controls {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+/* FILE INPUT CSS */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.custom-input {
+  position: relative;
+  font-size: 1.25rem;
+  border: 1px solid #339af0;
+  outline: none;
+  border-radius: 0.35rem;
+  letter-spacing: 1px;
+  background: transparent;
+  color: #339af0;
+  font-weight: 500;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  overflow: hidden;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s;
+}
+
+.custom-input:hover {
+  transform: scale(1.02);
+}
+
+.custom-input:focus {
+  outline: none;
+}
+
+.real-input {
+  display: none;
+}
+
+.cloud-icon {
+  font-size: 1.5rem;
 }
 
 .education-input-box {
@@ -50,28 +108,44 @@
   cursor: pointer;
 }
 
-.education-details-container {
+.education-details-container,
+.document-details-container {
   margin-top: 1rem;
   min-height: 18rem;
 }
 
+.document-details-list-headings,
 .education-details-list-headings,
-.education-details-lists {
+.education-details-lists,
+.document-details-lists {
   list-style-type: none;
   display: grid;
+}
+
+.education-details-list-headings,
+.education-details-lists {
   grid-template-columns: 0.55fr 1.5fr 3fr 1.25fr 1.25fr 0.8fr;
 }
 
-.education-details-lists {
+.document-details-list-headings,
+.document-details-lists {
+  grid-template-columns: 0.55fr 4fr 2fr 1fr 1fr;
+}
+
+.education-details-lists,
+.document-details-lists {
   border-bottom: 1px solid #d0d0d0;
 }
 
-.education-details-lists:hover {
+.education-details-lists:hover,
+.document-details-lists:hover {
   background: #f8f9ff;
 }
 
 .education-details-list-headings li,
-.education-details-lists li {
+.document-details-list-headings li,
+.education-details-lists li,
+.document-details-lists li {
   padding: 0.5rem;
   display: flex;
   justify-content: center;
@@ -81,21 +155,31 @@
   letter-spacing: 0.5px;
 }
 
-.education-details-list-headings li {
+.education-details-list-headings li,
+.document-details-list-headings li {
   font-weight: 600;
   background: #d5d6f4;
   color: #343a40;
   border-right: 2px solid #ececec;
 }
 
-.delete-icon {
-  color: #fa5252;
+.delete-icon,
+.download-icon {
   cursor: pointer;
   transition: all 0.3s;
 }
 
-.delete-icon:hover {
+.delete-icon:hover,
+.download-icon:hover {
   transform: scale(1.2);
+}
+
+.delete-icon {
+  color: #fa5252;
+}
+
+.download-icon {
+  color: #868e96;
 }
 
 .form-actions {

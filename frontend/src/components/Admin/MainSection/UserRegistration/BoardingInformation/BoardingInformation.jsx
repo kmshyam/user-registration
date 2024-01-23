@@ -3,7 +3,6 @@ import classes from "./BoardingInformation.module.css";
 import { Input, SelectInput } from "../../../../UI/Input/InputItem";
 import Button from "../../../../UI/Button/Button";
 import { useLocation, useNavigate } from "react-router-dom";
-import { randomTenDigNum } from "../../../../Utils/unique";
 
 const initialState = {
   company: { data: "", value: "" },
@@ -179,7 +178,8 @@ const BoardingInformation = () => {
     });
   };
 
-  const previousNavigateHandler = () => {
+  const previousNavigateHandler = (e) => {
+    e.preventDefault();
     sessionStorage.removeItem("userBoardingData");
     const userPersonalData = JSON.parse(
       sessionStorage.getItem("userPersonalData")
