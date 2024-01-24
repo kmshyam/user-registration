@@ -56,6 +56,7 @@ const addressSchema = new Schema({
 const locationDetailSchema = new Schema({
   permanent_address: { type: addressSchema },
   current_address: { type: addressSchema },
+  isCurrentPermanentSame: { type: Boolean },
 });
 
 const educationDetailSchema = new Schema({

@@ -1,0 +1,82 @@
+.form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.login-box,
+.boarding-information-box {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  margin-top: 0.5rem;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 1rem;
+}
+
+.login-box h2,
+.boarding-information-box h2 {
+  text-align: center;
+  font-size: 1.7rem;
+  font-weight: 500;
+  letter-spacing: 0.75px;
+}
+
+.login-input-box,
+.boarding-details-box {
+  display: grid;
+  column-gap: 3rem;
+}
+
+.login-input-box {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.boarding-details-box {
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.btn {
+  border-radius: 0.4rem;
+  letter-spacing: 0.75px;
+  font-weight: 600;
+  font-size: 1.3rem;
+  padding: 0.8rem 1.8rem;
+}
+
+.previous-next-btns {
+  margin-top: 1.2rem;
+  position: relative;
+}
+
+.previous-btn,
+.next-btn {
+  width: 12rem;
+}
+
+.previous-btn {
+  background: linear-gradient(to bottom right, #e46b69, #ff3636);
+  color: #fff5f5;
+}
+
+.next-btn {
+  background: linear-gradient(to bottom right, #027535, #41ff57);
+  color: #ebfbee;
+}
+
+.previous-btn:hover {
+  background: linear-gradient(to bottom right, #ff7471, #e63131);
+}
+
+.next-btn:hover {
+  background: linear-gradient(to bottom right, #026931, #35ff4d);
+}

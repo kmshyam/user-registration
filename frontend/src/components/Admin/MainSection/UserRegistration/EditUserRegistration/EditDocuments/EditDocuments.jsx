@@ -1,7 +1,5 @@
-import React, { useEffect, useReducer, useState } from "react";
-import classes from "./Documents.module.css";
-import { Input, SelectInput } from "../../../../UI/Input/InputItem";
-import Button from "../../../../UI/Button/Button";
+import React, { useEffect, useReducer } from "react";
+import classes from "./EditDocuments.module.css";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,8 +7,10 @@ import {
   faDownload,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { useUsers } from "../../../../../store/UsersContext/UserContextProvider";
-import { getAuthToken } from "../../../../Utils/auth";
+import { useUsers } from "../../../../../../store/UsersContext/UserContextProvider";
+import { getAuthToken } from "../../../../../Utils/auth";
+import { Input, SelectInput } from "../../../../../UI/Input/InputItem";
+import Button from "../../../../../UI/Button/Button";
 
 const url = import.meta.env.VITE_REACT_APP_URL;
 const port = import.meta.env.VITE_REACT_APP_PORT;
@@ -27,10 +27,24 @@ const initialState = {
 const documentsReducer = (state, action) => {
   switch (action.type) {
     case "UPDATE_FIELD":
-      return {
-        ...state,
-        [action.payload.name]: action.payload.value,
-      };
+      if (action.payload.name === "userDocumentsData") {
+        return {
+          ...state,
+          education_details:
+            typeof action.payload.value.education_details === "string"
+              ? JSON.parse(action.payload.value.education_details)
+              : action.payload.value.education_details,
+          documents:
+            typeof action.payload.value.documents === "string"
+              ? JSON.parse(action.payload.value.documents)
+              : action.payload.value.documents,
+        };
+      } else {
+        return {
+          ...state,
+          [action.payload.name]: action.payload.value,
+        };
+      }
     case "ADD_EDUCATION_QUALIFICATION":
       return {
         ...state,
@@ -60,27 +74,20 @@ const documentsReducer = (state, action) => {
   }
 };
 
-const Documents = () => {
+const EditDocuments = () => {
   const [documentsState, dispatchFn] = useReducer(
     documentsReducer,
     initialState
   );
-  const [personalInfo, setPersonalInfo] = useState({});
-  const { addUserRegistrationDetailsHandler } = useUsers();
+  const { updateUserRegistrationDetailsHandler } = useUsers();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { personalInfoState } = JSON.parse(
-      sessionStorage.getItem("userPersonalData")
-    );
-    if (sessionStorage.getItem("userDocuments")) {
-      const userData = JSON.parse(sessionStorage.getItem("userDocuments"));
-      dispatchFn({
-        type: "UPDATE_FIELD",
-        payload: { value: userData, name: "documents" },
-      });
-    }
-    setPersonalInfo(personalInfoState);
+    const userData = JSON.parse(sessionStorage.getItem("editDocumentsInfo"));
+    dispatchFn({
+      type: "UPDATE_FIELD",
+      payload: { value: userData, name: "userDocumentsData" },
+    });
   }, []);
 
   const uploadFile = async (file) => {
@@ -88,7 +95,9 @@ const Documents = () => {
     formData.append("file", file);
     try {
       const response = await fetch(
-        `${url}:${port}/user/detail/upload/files/${personalInfo.user_id}`,
+        `${url}:${port}/user/detail/upload/files/${sessionStorage.getItem(
+          "userId"
+        )}`,
         {
           method: "POST",
           headers: {
@@ -100,32 +109,28 @@ const Documents = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        const userDocuments = sessionStorage.getItem("userDocuments");
-        if (!userDocuments) {
-          sessionStorage.setItem(
-            "userDocuments",
-            JSON.stringify([data.fileDetail])
-          );
-          dispatchFn({
-            type: "UPDATE_FIELD",
-            payload: {
-              value: [...documentsState.documents, data.fileDetail],
-              name: "documents",
-            },
-          });
-        } else {
-          const userDocumentsArr = JSON.parse(userDocuments);
-          const updatedDocumentsArr = [...userDocumentsArr, data.fileDetail];
-          sessionStorage.removeItem("userDocuments");
-          sessionStorage.setItem(
-            "userDocuments",
-            JSON.stringify(updatedDocumentsArr)
-          );
-          dispatchFn({
-            type: "UPDATE_FIELD",
-            payload: { value: updatedDocumentsArr, name: "documents" },
-          });
-        }
+        const { documents } = JSON.parse(
+          sessionStorage.getItem("editDocumentsInfo")
+        );
+        const updatedDocumentsData = [
+          ...JSON.parse(documents),
+          data.fileDetail,
+        ];
+        sessionStorage.removeItem("editDocumentsInfo");
+        sessionStorage.setItem(
+          "editDocumentsInfo",
+          JSON.stringify({
+            education_details: JSON.stringify(documentsState.education_details),
+            documents: JSON.stringify(updatedDocumentsData),
+          })
+        );
+        dispatchFn({
+          type: "UPDATE_FIELD",
+          payload: {
+            value: updatedDocumentsData,
+            name: "documents",
+          },
+        });
       }
     } catch (err) {
       console.log(err.message);
@@ -145,7 +150,9 @@ const Documents = () => {
   const downloadDocumentHandler = async (file) => {
     try {
       const response = await fetch(
-        `${url}:${port}/user/detail/document/download?userID=${personalInfo.user_id}&file=${file.storedFileName}`,
+        `${url}:${port}/user/detail/document/download?userID=${sessionStorage.getItem(
+          "userId"
+        )}&file=${file.storedFileName}`,
         {
           method: "GET",
           headers: {
@@ -172,7 +179,9 @@ const Documents = () => {
   const deleteDocumentHandler = async (file) => {
     try {
       const response = await fetch(
-        `${url}:${port}/user/detail/document/delete?userID=${personalInfo.user_id}&file=${file.storedFileName}`,
+        `${url}:${port}/user/detail/document/delete?userID=${sessionStorage.getItem(
+          "userId"
+        )}&file=${file.storedFileName}`,
         {
           method: "PUT",
           headers: {
@@ -185,12 +194,21 @@ const Documents = () => {
     } catch (err) {
       console.log(err.message);
     }
-    const userDocuments = JSON.parse(sessionStorage.getItem("userDocuments"));
-    const filteredDocuments = userDocuments.filter(
+    const { documents } = JSON.parse(
+      sessionStorage.getItem("editDocumentsInfo")
+    );
+    const parsedDocuments = [...JSON.parse(documents)];
+    const filteredDocuments = parsedDocuments.filter(
       (document) => document.storedFileName !== file.storedFileName
     );
-    sessionStorage.removeItem("userDocuments");
-    sessionStorage.setItem("userDocuments", JSON.stringify(filteredDocuments));
+    sessionStorage.removeItem("editDocumentsInfo");
+    sessionStorage.setItem(
+      "editDocumentsInfo",
+      JSON.stringify({
+        education_details: JSON.stringify(documentsState.education_details),
+        documents: JSON.stringify(filteredDocuments),
+      })
+    );
     dispatchFn({
       type: "UPDATE_FIELD",
       payload: { value: filteredDocuments, name: "documents" },
@@ -240,55 +258,48 @@ const Documents = () => {
 
   const previousNavigateHandler = async (e) => {
     e.preventDefault();
-    sessionStorage.removeItem("userDocuments");
-    const userLocationData = JSON.parse(
-      sessionStorage.getItem("userLocationData")
+    sessionStorage.removeItem("editDocumentsInfo");
+    sessionStorage.setItem(
+      "editDocumentsInfo",
+      JSON.stringify({
+        education_details: JSON.stringify(documentsState.education_details),
+        documents: JSON.stringify(documentsState.documents),
+      })
     );
-    try {
-      const response = await fetch(
-        `${url}:${port}/user/detail/documents/delete/all?userID=${personalInfo.user_id}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: getAuthToken(),
-          },
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-    } catch (err) {
-      console.log(err.message);
-    }
-    navigate("/user/registration/location_info", {
-      state: userLocationData,
-    });
+    navigate(
+      `/user/registration/edit/location_info?userID=${sessionStorage.getItem(
+        "userId"
+      )}`
+    );
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const { personalInfoState } = JSON.parse(
-      sessionStorage.getItem("userPersonalData")
+    const personalInfoState = JSON.parse(
+      sessionStorage.getItem("editUserPersonalInfo")
     );
-    const { boardingInfoState } = JSON.parse(
-      sessionStorage.getItem("userBoardingData")
+    const boardingInfoState = JSON.parse(
+      sessionStorage.getItem("editUserBoardingInfo")
     );
-    const { locationInfoState, isCurrentPermanentSame } = JSON.parse(
-      sessionStorage.getItem("userLocationData")
+    const locationInfoState = JSON.parse(
+      sessionStorage.getItem("editUserLocationInfo")
     );
     const documentsData = documentsState;
 
-    await addUserRegistrationDetailsHandler(
+    const data = await updateUserRegistrationDetailsHandler(
       personalInfoState,
       boardingInfoState,
       locationInfoState,
-      documentsData,
-      isCurrentPermanentSame
+      documentsData
     );
-    sessionStorage.removeItem("userPersonalData");
-    sessionStorage.removeItem("userBoardingData");
-    sessionStorage.removeItem("userLocationData");
-    sessionStorage.removeItem("userDocuments");
-    navigate("/user/registration/personal_info");
+    if (data.status === "Success") {
+      sessionStorage.removeItem("editUserPersonalInfo");
+      sessionStorage.removeItem("editUserBoardingInfo");
+      sessionStorage.removeItem("editUserLocationInfo");
+      sessionStorage.removeItem("editDocumentsInfo");
+      sessionStorage.removeItem("userId");
+      navigate("/user/all");
+    }
   };
 
   return (
@@ -447,4 +458,4 @@ const Documents = () => {
   );
 };
 
-export default Documents;
+export default EditDocuments;

@@ -4,6 +4,7 @@ import classes from "./UserDetailViewModal.module.css";
 import Backdrop from "../../../../UI/Backdrop/Backdrop";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faFileImage } from "@fortawesome/free-solid-svg-icons";
+import { threeDigitMonthDateConverter } from "../../../../Utils/calculateData";
 
 const url = import.meta.env.VITE_REACT_APP_URL;
 const port = import.meta.env.VITE_REACT_APP_PORT;
@@ -101,7 +102,9 @@ const ModalOverlay = ({ title, userData, onClose }) => {
             </div>
             <div className={classes.detail}>
               <p>Date Of Birth</p>
-              <h3>{personal_details.date_of_birth}</h3>
+              <h3>
+                {threeDigitMonthDateConverter(personal_details.date_of_birth)}
+              </h3>
             </div>
             <div className={classes.detail}>
               <p>Email</p>
@@ -125,11 +128,11 @@ const ModalOverlay = ({ title, userData, onClose }) => {
             </div>
             <div className={classes.detail}>
               <p>DOT</p>
-              <h3>{personal_details.dot}</h3>
+              <h3>{threeDigitMonthDateConverter(personal_details.dot)}</h3>
             </div>
             <div className={classes.detail}>
               <p>DOJ</p>
-              <h3>{personal_details.doj}</h3>
+              <h3>{threeDigitMonthDateConverter(personal_details.doj)}</h3>
             </div>
             <div className={classes.detail}>
               <p>Aadhar No</p>
@@ -319,7 +322,7 @@ const UserDetailViewModal = ({ title, userData, onClose }) => {
   return (
     <>
       {ReactDOM.createPortal(
-        <Backdrop />,
+        <Backdrop onClick={onClose} />,
         document.getElementById("backdrop-root")
       )}
       {ReactDOM.createPortal(

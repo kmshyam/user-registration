@@ -4,6 +4,7 @@ const {
   uploadUserFiles,
   postUserRegistrationData,
   getAllRegisteredUsersData,
+  editUserRegistrationData,
   deleteUserData,
   downloadUserDocument,
   deleteUserDocument,
@@ -22,6 +23,8 @@ router.post(
 router.post("/form/register", authToken, postUserRegistrationData);
 
 router.get("/all", authToken, getAllRegisteredUsersData);
+
+router.put("/form/register/edit", authToken, editUserRegistrationData);
 
 router.delete("/delete/:id", authToken, deleteUserData);
 

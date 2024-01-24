@@ -29,7 +29,8 @@ const UsersContextProvider = ({ children }) => {
     personalInfo,
     boardingInfo,
     locationInfo,
-    documentsInfo
+    documentsInfo,
+    isCurrentPermanentSame
   ) => {
     try {
       const requiredFields = [
@@ -167,6 +168,7 @@ const UsersContextProvider = ({ children }) => {
             state: JSON.stringify(locationInfo.currentAddress.state),
             city: JSON.stringify(locationInfo.currentAddress.city),
           },
+          isCurrentPermanentSame,
         },
         education_details: {
           education_details: JSON.stringify(documentsInfo.education_details),
@@ -189,14 +191,184 @@ const UsersContextProvider = ({ children }) => {
     }
   };
 
-  const deleteUserDataHandler = async (id) => {
+  const updateUserRegistrationDetailsHandler = async (
+    personalInfo,
+    boardingInfo,
+    locationInfo,
+    documentsInfo
+  ) => {
     try {
-      const response = await fetch(`${url}:${port}/user/detail/delete/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: getAuthToken(),
+      const requiredFields = [
+        personalInfo.user_id,
+        boardingInfo.username,
+        boardingInfo.company_name,
+        personalInfo.first_name,
+        personalInfo.last_name,
+        personalInfo.legal_name,
+        personalInfo.father_name,
+        personalInfo.mother_name,
+        personalInfo.gender.data,
+        personalInfo.marital_status.data,
+        personalInfo.blood_group.data,
+        personalInfo.date_of_birth,
+        personalInfo.email,
+        personalInfo.location,
+        personalInfo.contact_personal,
+        personalInfo.contact_family,
+        personalInfo.emergency_number,
+        personalInfo.dot,
+        personalInfo.doj,
+        personalInfo.aadhar_number,
+        personalInfo.pan_number,
+        personalInfo.storedFileName,
+        personalInfo.originalFileName,
+        boardingInfo.company,
+        boardingInfo.branch,
+        boardingInfo.unit,
+        boardingInfo.floor,
+        boardingInfo.department,
+        boardingInfo.team,
+        boardingInfo.designation,
+        boardingInfo.shift_timing,
+        boardingInfo.week_off,
+        boardingInfo.reporting_to,
+        boardingInfo.employee_code,
+        boardingInfo.work_station,
+        locationInfo.permanent_address.door_flat_no,
+        locationInfo.permanent_address.street_block,
+        locationInfo.permanent_address.area_village,
+        locationInfo.permanent_address.landmark,
+        locationInfo.permanent_address.taluk,
+        locationInfo.permanent_address.post,
+        locationInfo.permanent_address.pincode,
+        JSON.stringify(locationInfo.permanent_address.country),
+        JSON.stringify(locationInfo.permanent_address.state),
+        JSON.stringify(locationInfo.permanent_address.city),
+        locationInfo.current_address.door_flat_no,
+        locationInfo.current_address.street_block,
+        locationInfo.current_address.area_village,
+        locationInfo.current_address.landmark,
+        locationInfo.current_address.taluk,
+        locationInfo.current_address.post,
+        locationInfo.current_address.pincode,
+        JSON.stringify(locationInfo.current_address.country),
+        JSON.stringify(locationInfo.current_address.state),
+        JSON.stringify(locationInfo.current_address.city),
+        JSON.stringify(documentsInfo.education_details),
+        JSON.stringify(documentsInfo.documents),
+      ];
+
+      const isAnyFieldEmpty = requiredFields.some(
+        (field) => field === "" || field === null || field === undefined
+      );
+
+      const status = isAnyFieldEmpty ? "Incomplete" : "Complete";
+
+      const userRegistrationData = {
+        loginDetails: {
+          user_id: personalInfo.user_id,
+          username: boardingInfo.username,
+          company_name: boardingInfo.company_name,
         },
-      });
+        personalDetails: {
+          first_name: personalInfo.first_name,
+          last_name: personalInfo.last_name,
+          legal_name: personalInfo.legal_name,
+          father_name: personalInfo.father_name,
+          mother_name: personalInfo.mother_name,
+          gender: personalInfo.gender,
+          marital_status: personalInfo.marital_status,
+          blood_group: personalInfo.blood_group,
+          date_of_birth: personalInfo.date_of_birth,
+          email: personalInfo.email,
+          location: personalInfo.location,
+          contact_personal: personalInfo.contact_personal,
+          contact_family: personalInfo.contact_family,
+          emergency_number: personalInfo.emergency_number,
+          dot: personalInfo.dot,
+          doj: personalInfo.doj,
+          aadhar_number: personalInfo.aadhar_number,
+          pan_number: personalInfo.pan_number,
+          storedFileName: personalInfo.storedFileName,
+          originalFileName: personalInfo.originalFileName,
+        },
+        boardingDetails: {
+          company: boardingInfo.company,
+          branch: boardingInfo.branch,
+          unit: boardingInfo.unit,
+          floor: boardingInfo.floor,
+          department: boardingInfo.department,
+          team: boardingInfo.team,
+          designation: boardingInfo.designation,
+          shift_timing: boardingInfo.shift_timing,
+          week_off: boardingInfo.week_off,
+          reporting_to: boardingInfo.reporting_to,
+          employee_code: boardingInfo.employee_code,
+          work_station: boardingInfo.work_station,
+        },
+        locationDetails: {
+          permanentAddress: {
+            door_flat_no: locationInfo.permanent_address.door_flat_no,
+            street_block: locationInfo.permanent_address.street_block,
+            area_village: locationInfo.permanent_address.area_village,
+            landmark: locationInfo.permanent_address.landmark,
+            taluk: locationInfo.permanent_address.taluk,
+            post: locationInfo.permanent_address.post,
+            pincode: locationInfo.permanent_address.pincode,
+            country: JSON.stringify(locationInfo.permanent_address.country),
+            state: JSON.stringify(locationInfo.permanent_address.state),
+            city: JSON.stringify(locationInfo.permanent_address.city),
+          },
+          currentAddress: {
+            door_flat_no: locationInfo.current_address.door_flat_no,
+            street_block: locationInfo.current_address.street_block,
+            area_village: locationInfo.current_address.area_village,
+            landmark: locationInfo.current_address.landmark,
+            taluk: locationInfo.current_address.taluk,
+            post: locationInfo.current_address.post,
+            pincode: locationInfo.current_address.pincode,
+            country: JSON.stringify(locationInfo.current_address.country),
+            state: JSON.stringify(locationInfo.current_address.state),
+            city: JSON.stringify(locationInfo.current_address.city),
+          },
+          isCurrentPermanentSame: locationInfo.isCurrentPermanentSame,
+        },
+        education_details: {
+          education_details: JSON.stringify(documentsInfo.education_details),
+          documents: JSON.stringify(documentsInfo.documents),
+        },
+        status,
+      };
+      const response = await fetch(
+        `${url}:${port}/user/detail/form/register/edit`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: getAuthToken(),
+          },
+          body: JSON.stringify(userRegistrationData),
+        }
+      );
+      const data = await response.json();
+      setStatus(data);
+      return data;
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const deleteUserDataHandler = async (id, userID) => {
+    try {
+      const response = await fetch(
+        `${url}:${port}/user/detail/delete/${id}?userID=${userID}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: getAuthToken(),
+          },
+        }
+      );
       const data = await response.json();
       setStatus(data);
     } catch (err) {
@@ -209,6 +381,7 @@ const UsersContextProvider = ({ children }) => {
       value={{
         registeredUsers,
         addUserRegistrationDetailsHandler,
+        updateUserRegistrationDetailsHandler,
         deleteUserDataHandler,
       }}
     >

@@ -5,6 +5,7 @@ import MainHeader from "../../../UI/MainHeader/MainHeader";
 import {
   faChevronLeft,
   faChevronRight,
+  faEdit,
   faEye,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +16,7 @@ import {
 } from "../../../Utils/calculateData";
 import { Input, SelectInput } from "../../../UI/Input/InputItem";
 import UserDetailViewModal from "./UserDetailViewModal/UserDetailViewModal";
+import { useNavigate } from "react-router-dom";
 
 const RegisteredUsers = () => {
   const { registeredUsers, deleteUserDataHandler } = useUsers();
@@ -23,6 +25,8 @@ const RegisteredUsers = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUserData, setSelectedUserData] = useState({});
   const [showUserDetailModal, setShowUserDetailModal] = useState(false);
+
+  const navigate = useNavigate();
 
   const indexOfLastEntry = currentPage * entriesPerPage;
   const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
@@ -65,13 +69,45 @@ const RegisteredUsers = () => {
     setShowUserDetailModal(true);
   };
 
+  const editUserDetailHandler = (userData) => {
+    sessionStorage.removeItem("editUserPersonalInfo");
+    sessionStorage.removeItem("editUserBoardingInfo");
+    sessionStorage.removeItem("editUserLocationInfo");
+    sessionStorage.removeItem("editDocumentsInfo");
+    sessionStorage.setItem(
+      "editUserPersonalInfo",
+      JSON.stringify({
+        ...userData.personal_details,
+        user_id: userData.userID,
+      })
+    );
+    sessionStorage.setItem(
+      "editUserBoardingInfo",
+      JSON.stringify({
+        ...userData.boarding_details,
+        username: userData.username,
+        company_name: userData.company_name,
+      })
+    );
+    sessionStorage.setItem(
+      "editUserLocationInfo",
+      JSON.stringify(userData.location_details)
+    );
+    sessionStorage.setItem(
+      "editDocumentsInfo",
+      JSON.stringify(userData.education_details)
+    );
+    sessionStorage.setItem("userId", userData.userID);
+    navigate(`/user/registration/edit/personal_info?userId=${userData.userID}`);
+  };
+
   const closeUserDetailModal = async () => {
     setSelectedUserData({});
     setShowUserDetailModal(false);
   };
 
   const deleteUserDetailHandler = async (item) => {
-    await deleteUserDataHandler(item._id);
+    await deleteUserDataHandler(item._id, item.userID);
   };
 
   return (
@@ -143,6 +179,11 @@ const RegisteredUsers = () => {
                   <FontAwesomeIcon
                     icon={faEye}
                     onClick={() => viewUserDetailHandler(item)}
+                    className={classes["view-icon"]}
+                  />
+                  <FontAwesomeIcon
+                    icon={faEdit}
+                    onClick={() => editUserDetailHandler(item)}
                     className={classes["view-icon"]}
                   />
                   <FontAwesomeIcon

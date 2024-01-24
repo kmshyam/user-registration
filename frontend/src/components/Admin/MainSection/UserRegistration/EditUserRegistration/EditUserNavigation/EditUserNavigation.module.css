@@ -1,0 +1,25 @@
+.add-user-menu-items {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.7rem 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.75px;
+  background-color: #ebebeb;
+  color: #495057;
+}
+
+.active {
+  background-color: #d5d6f4;
+  color: #343a40;
+  font-weight: 500;
+  letter-spacing: 0.65px;
+}

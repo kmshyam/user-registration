@@ -13,6 +13,11 @@ import BoardingInformation from "./components/Admin/MainSection/UserRegistration
 import LocationInformation from "./components/Admin/MainSection/UserRegistration/LocationInformation/LocationInformation";
 import Documents from "./components/Admin/MainSection/UserRegistration/Documents/Documents";
 import UsersContextProvider from "./store/UsersContext/UserContextProvider";
+import EditUserRegistration from "./components/Admin/MainSection/UserRegistration/EditUserRegistration/EditUserRegistration";
+import EditPersonalInformation from "./components/Admin/MainSection/UserRegistration/EditUserRegistration/EditPersonalInformation/EditPersonalInformation";
+import EditBoardingInformation from "./components/Admin/MainSection/UserRegistration/EditUserRegistration/EditBoardingInformation/EditBoardingInformation";
+import EditLocationInformation from "./components/Admin/MainSection/UserRegistration/EditUserRegistration/EditLocationInformation/EditLocationInformation";
+import EditDocuments from "./components/Admin/MainSection/UserRegistration/EditUserRegistration/EditDocuments/EditDocuments";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -44,6 +49,28 @@ const App = () => {
             {
               path: "documents",
               element: <Documents />,
+            },
+          ],
+        },
+        {
+          path: "/user/registration/edit",
+          element: <EditUserRegistration />,
+          children: [
+            {
+              path: "personal_info",
+              element: <EditPersonalInformation />,
+            },
+            {
+              path: "boarding_info",
+              element: <EditBoardingInformation />,
+            },
+            {
+              path: "location_info",
+              element: <EditLocationInformation />,
+            },
+            {
+              path: "documents",
+              element: <EditDocuments />,
             },
           ],
         },
